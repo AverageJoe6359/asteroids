@@ -1,6 +1,6 @@
 import pygame # type: ignore
 from constants import *
-from player import Player
+from player import *
 def main():
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -17,8 +17,10 @@ def main():
 
         screen.fill("black")
         player.draw(screen)
-        pygame.display.flip()
         dt = (fps_clock.tick(60) / 1000)
+        player.update(dt)
+        pygame.display.flip()
+        
         
 if __name__ == "__main__":
     main()
