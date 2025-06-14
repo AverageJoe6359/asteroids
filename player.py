@@ -49,3 +49,8 @@ class Player(CircleShape):
         create_shot = Shot(self.position.x, self.position.y)
         shot_velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         create_shot.velocity = shot_velocity
+
+    def draw_lives(screen, lives):
+        font = pygame.font.SysFont(None, 36)
+        text = font.render(f"Lives: {lives}", True, (255, 0, 0))
+        screen.blit(text, (10, 10))    
