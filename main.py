@@ -7,6 +7,7 @@ from circleshape import *
 from shot import *
 import sys
 
+
 def main():
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -36,7 +37,7 @@ def main():
                 sys.exit("Game Over!")
             for s in shots:
                 if s.check_collision(a):
-                    a.kill()
+                    a.split()
                     s.kill()
 
                       
