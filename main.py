@@ -2,37 +2,15 @@
 import pygame # type: ignore
 from constants import *
 from player import *
-from asteroid import *
-from asteroidfield import *
-from circleshape import *
-from shot import *
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from circleshape import CircleShape
+from shot import Shot
 import sys
-
-#game_over_screen function
-def game_over_screen(screen, score):
-    font = pygame.font.SysFont(None, 72)
-    small_font = pygame.font.SysFont(None, 36)
-    game_over_text = font.render("Game Over!", True, (255, 0, 0))
-    score_text = small_font.render(f"Score: {score}", True, (255, 255, 255))
-    restart_text = small_font.render("Restart", True, (0, 0, 0))
-    button_rect = pygame.Rect((SCREEN_WIDTH//2 - 75, SCREEN_HEIGHT//2 + 40, 150, 50))
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if button_rect.collidepoint(event.pos):
-                    return  # Restart the game
-
-        screen.fill("black")
-        screen.blit(game_over_text, (SCREEN_WIDTH//2 - game_over_text.get_width()//2, SCREEN_HEIGHT//2 - 100))
-        screen.blit(score_text, (SCREEN_WIDTH//2 - score_text.get_width()//2, SCREEN_HEIGHT//2 - 20))
-        pygame.draw.rect(screen, (255, 255, 255), button_rect)
-        screen.blit(restart_text, (button_rect.x + (button_rect.width - restart_text.get_width())//2,
-                                   button_rect.y + (button_rect.height - restart_text.get_height())//2))
-        pygame.display.flip()
+import os
+from highscores import * # Import the highscores functions
+from gameover import * # Import the game_over_screen function
+from title_screen import * # Import the main_menu function
 
 #main function
 # This is the main entry point of the game.
@@ -44,6 +22,11 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     while True:
+        main_menu(screen)
+        score = 0
+        next_extra_life_score = 5000
+        #Game initialization
+        pygame.display.set_caption("Asteroids")
         fps_clock = pygame.time.Clock()
         dt = 0
         updatable = pygame.sprite.Group() 
@@ -56,7 +39,6 @@ def main():
         Shot.containers = (updatable, drawable, shots)
         player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         lives = 3
-        score = 0
         player_hit = False
         hit_cooldown = 1000  # milliseconds
         last_hit_time = 0
@@ -97,17 +79,17 @@ def main():
                 for s in shots:
                     if s.check_collision(a):
                         if a.radius > 50:
-                            score += 100
+                            score += 20
                         elif a.radius > 30:
                             score += 50
                         else:
-                            score += 20
+                            score += 100
                         a.split()
                         s.kill()
         #earn extra life
-            if score >= 5000:
+            if score >= next_extra_life_score:
                 lives += 1
-                score -= 5000
+                next_extra_life_score += 5000
         #draw the game             
             screen.fill("black")
             for d in drawable:
