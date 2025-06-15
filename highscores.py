@@ -1,9 +1,14 @@
 from __future__ import annotations
 import os
-import pygame
+import sys
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 # highscore.py
-HIGHSCORE_FILE = "highscores.txt"
+if getattr(sys, 'frozen', False):
+    BASE_PATH = sys._MEIPASS
+else:
+    BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+HIGHSCORE_FILE = os.path.join(BASE_PATH, "highscores.txt")
 
 def load_highscores():
     if not os.path.exists(HIGHSCORE_FILE):
