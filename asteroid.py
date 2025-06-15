@@ -2,12 +2,21 @@ from circleshape import *
 from constants import *
 import random
 
+def get_asteroid_color(radius):
+    if radius > 50:
+        return (255, 0, 0)      # Red for large asteroids
+    elif radius > 30:
+        return (255, 165, 0)    # Orange for medium asteroids
+    else:
+        return (255, 255, 0)  # Yellow for small asteroids
+
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
     
     def draw(self, screen):
-        pygame.draw.circle(screen, "red", (self.position.x, self.position.y), self.radius, 2)
+        color = get_asteroid_color(self.radius)
+        pygame.draw.circle(screen, color, (self.position.x, self.position.y), self.radius, 2)
     
     def update(self, dt):
         self.position += (self.velocity * dt)
