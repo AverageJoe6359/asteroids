@@ -23,6 +23,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     while True:
         main_menu(screen)
+        paused = False
         score = 0
         next_extra_life_score = 5000
         #Game initialization
@@ -60,10 +61,13 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        paused = not paused
         #time handling and update
             now = pygame.time.get_ticks()
-            updatable.update(dt)
+            if not paused:
+                updatable.update(dt)
         
         #collision detection
             for a in asteroids:
@@ -97,7 +101,10 @@ def main():
 
             draw_lives(screen, lives)
             draw_score(screen, score)
-
+            if paused:
+                font = pygame.font.SysFont(None, 72)
+                pause_text = font.render("Paused", True, (255, 255, 255))
+                screen.blit(pause_text, (SCREEN_WIDTH//2 - pause_text.get_width()//2, SCREEN_HEIGHT//2 - pause_text.get_height()//2))
             dt = (fps_clock.tick(60) / 1000)
         
             pygame.display.flip()
