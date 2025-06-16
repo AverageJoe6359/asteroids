@@ -1,6 +1,6 @@
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from highscores import load_highscores, draw_highscores
-import pygame
+from highscores import *
+import pygame # type: ignore
 import sys
 def main_menu(screen):
     font = pygame.font.SysFont(None, 48)
