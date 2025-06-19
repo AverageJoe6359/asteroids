@@ -25,7 +25,7 @@ def main():
         main_menu(screen)
         paused = False
         score = 0
-        next_extra_life_score = 5000
+        next_extra_life_score = 10000
         #Game initialization
         pygame.display.set_caption("Asteroids")
         fps_clock = pygame.time.Clock()
@@ -93,7 +93,7 @@ def main():
         #earn extra life
             if score >= next_extra_life_score:
                 lives += 1
-                next_extra_life_score += 5000
+                next_extra_life_score += 10000
         #draw the game             
             screen.fill("black")
             for d in drawable:
