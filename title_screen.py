@@ -2,13 +2,16 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from highscores import *
 import pygame # type: ignore
 import sys
-def main_menu(screen):
+def main_menu(screen): # This function displays the main menu of the game, allowing the player to start the game or view high scores.
+    pygame.display.set_caption("Asteroids - Main Menu")
+    screen.fill((0, 0, 30))  # Dark blue background
+    pygame.display.flip()  # Update the display to show the background
     font = pygame.font.SysFont(None, 48)
     small_font = pygame.font.SysFont(None, 36)
     play_button = pygame.Rect(SCREEN_WIDTH//2 - 100, SCREEN_HEIGHT//2 + 100, 200, 60)
     highscores = load_highscores()
 
-    while True:
+    while True: # Main loop for the main menu
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

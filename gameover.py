@@ -3,7 +3,7 @@ import sys
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from highscores import load_highscores, save_highscores
 
-def game_over_screen(screen, score):
+def game_over_screen(screen, score): # This function displays the game over screen, showing the player's score and allowing them to restart the game.
     font = pygame.font.SysFont(None, 72)
     small_font = pygame.font.SysFont(None, 36)
     game_over_text = font.render("YOU DIED", True, (255, 0, 0))
@@ -11,12 +11,13 @@ def game_over_screen(screen, score):
     restart_text = small_font.render("Restart", True, (0, 0, 0))
     button_rect = pygame.Rect((SCREEN_WIDTH//2 - 75, SCREEN_HEIGHT//2 + 40, 150, 50))
 
+# Save the score to highscores
     highscores = load_highscores()
     highscores.append(score)
     highscores = sorted(highscores, reverse=True)[:10]
     save_highscores(highscores)
     
-    while True:
+    while True: # Main loop for the game over screen
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
