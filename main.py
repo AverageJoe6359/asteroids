@@ -32,6 +32,7 @@ def main():
         asteroids = pygame.sprite.Group()
         shots = pygame.sprite.Group()
         active_powerups = pygame.sprite.Group()
+        active_effects = []
         sidekick = None
         game_state = {
             "score_multiplier": 1,
@@ -135,21 +136,24 @@ def main():
                             shot = Shot(player.position.x, player.position.y)
                             direction = (target.position - player.position).normalize()
                             shot.velocity = direction * PLAYER_SHOOT_SPEED
-                            updatable.add(shot)
-                            drawable.add(shot)
-                            shots.add(shot)
                         game_state["homing_shot_timer"] = 0
                 else:
                     game_state["homing_shot_timer"] = 0
 
-                # --- POWERUP UPDATES & COLLECTION ---
-                for powerup in active_powerups:
+                 # --- POWERUP UPDATES & COLLECTION ---
+                for powerup in list(active_powerups):
                     powerup.update(player, game_state, dt, current_time)
                     if player.check_collision(powerup):
                         powerup.activate(player, game_state, current_time)
                         powerup.collected = True
-                        powerup.kill()
-
+                        active_effects.append(powerup)  # Track effect after collection
+                        powerup.kill()  # Remove from visible group
+                
+                # --- UPDATE ACTIVE EFFECTS (timed powerups) ---
+                for effect in active_effects[:]:
+                    effect.update(player, game_state, dt, current_time)
+                    if not effect.active:
+                        active_effects.remove(effect)
                 # --- COLLISION DETECTION ---
                 for a in asteroids:
                     if a.check_collision(player):

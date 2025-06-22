@@ -1,4 +1,4 @@
-import pygame 
+import pygame # type: ignore
 from random import random, choices, randint
 from constants import *
 
@@ -45,7 +45,7 @@ class PowerUp(pygame.sprite.Sprite):
             return 0  # nuke is collectable, single use
 
     def draw(self, screen):
-        color = (0, 255, 255)
+        color = (0, 255, 255) # Cyan color for power-ups
         pygame.draw.circle(screen, color, (int(self.position.x), int(self.position.y)), self.radius, 2)
         font = pygame.font.SysFont(None, 32)
         text = font.render(self.icon, True, color)
@@ -75,10 +75,6 @@ class PowerUp(pygame.sprite.Sprite):
             return
         if self.type in ("double_points", "rapid_fire", "clone", "homing_shot", "shield"):
             self.timer -= dt
-        if self.type == "homing_shot" and self.timer > 0:
-            if current_time - self.last_homing_time >= 5:
-                # player.fire_homing_shot()
-                self.last_homing_time = current_time
         if self.type in ("double_points", "rapid_fire", "clone", "homing_shot", "shield") and self.timer <= 0:
             self.deactivate(player, game_state)
 
