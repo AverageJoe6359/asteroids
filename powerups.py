@@ -3,13 +3,13 @@ from random import random, choices, randint
 from constants import *
 
 def should_spawn_powerup(score):
-    return score >= 20000 and random() < 0.08
+    return score >= 15000 and random() < 0.06 # 6% chance to spawn a powerup when score is above 15000
 
-def choose_powerup():
+def choose_powerup(): # Randomly choose a powerup type based on predefined weights
     types, weights = zip(*POWERUP_TYPES)
     return choices(types, weights)[0]
 
-def spawn_powerup(score):
+def spawn_powerup(score):# Function to spawn a powerup based on the current score
     if should_spawn_powerup(score):
         powerup_type = choose_powerup()
         x = randint(40, SCREEN_WIDTH-40)
@@ -17,7 +17,7 @@ def spawn_powerup(score):
         return PowerUp(powerup_type, (x, y))
     return None
 
-class PowerUp(pygame.sprite.Sprite):
+class PowerUp(pygame.sprite.Sprite):# Represents a power-up in the game
     def __init__(self, powerup_type, pos):
         super().__init__()
         self.type = powerup_type
@@ -30,7 +30,7 @@ class PowerUp(pygame.sprite.Sprite):
         self.icon = f"P^{POWERUP_DISPLAY_NAMES[self.type][0].upper()}"
         self.radius = 24
 
-    def get_duration(self):
+    def get_duration(self):# Returns the duration of the power-up effect based on its type
         if self.type == "double_points":
             return 15
         elif self.type == "rapid_fire":
@@ -44,14 +44,14 @@ class PowerUp(pygame.sprite.Sprite):
         else:
             return 0  # nuke is collectable, single use
 
-    def draw(self, screen):
+    def draw(self, screen):# Draws the power-up on the screen
         color = (0, 255, 255) # Cyan color for power-ups
         pygame.draw.circle(screen, color, (int(self.position.x), int(self.position.y)), self.radius, 2)
         font = pygame.font.SysFont(None, 32)
         text = font.render(self.icon, True, color)
         screen.blit(text, (self.position.x - text.get_width()//2, self.position.y - text.get_height()//2))
 
-    def activate(self, player, game_state, current_time):
+    def activate(self, player, game_state, current_time):# Activates the power-up and applies its effects
         self.active = True
         if self.type == "double_points":
             game_state["score_multiplier"] = 2

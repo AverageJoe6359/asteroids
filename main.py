@@ -90,8 +90,8 @@ def main():
                             sidekick.shoot()
 
             now = pygame.time.get_ticks()
+            dt = fps_clock.tick(60) / 1000
             if not paused:
-                dt = fps_clock.tick(60) / 1000
                 updatable.update(dt)
                 current_time = time.time()
 
@@ -190,19 +190,19 @@ def main():
                     next_extra_life_score += 10000
 
                 # --- DRAW ---
-                screen.fill("black")
-                for d in drawable:
+            screen.fill("black")
+            for d in drawable:
                     d.draw(screen)
-                for powerup in active_powerups:
-                    powerup.draw(screen)
-                draw_lives(screen, lives)
-                draw_score(screen, score)
-                draw_nukes(screen, game_state["nuke_count"])            
-                if paused:
-                    font = pygame.font.SysFont(None, 72)
-                    pause_text = font.render("Paused", True, (255, 255, 255))
-                    screen.blit(pause_text, (SCREEN_WIDTH//2 - pause_text.get_width()//2, SCREEN_HEIGHT//2 - pause_text.get_height()//2))
-                pygame.display.flip()
+            for powerup in active_powerups:
+                powerup.draw(screen)
+            draw_lives(screen, lives)
+            draw_score(screen, score)
+            draw_nukes(screen, game_state["nuke_count"])            
+            if paused:
+                font = pygame.font.SysFont(None, 72)
+                pause_text = font.render("Paused", True, (255, 255, 255)) # Pause text
+                screen.blit(pause_text, (SCREEN_WIDTH//2 - pause_text.get_width()//2, SCREEN_HEIGHT//2 - pause_text.get_height()//2))
+            pygame.display.flip()
 
         game_over_screen(screen, score)
 
